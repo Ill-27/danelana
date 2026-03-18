@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dante | Creator & Traveler</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Основные 7 цветов радуги из логотипа */
+        :root {
+            --red: #FF0000;
+            --orange: #FF8000;
+            --yellow: #FFFF00;
+            --green: #00FF80;
+            --cyan: #00D0FF;
+            --blue: #0000FF;
+            --purple: #8000FF;
+            
+            --glass-bg: rgba(25, 25, 30, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Глобальные стили */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Fira Code', monospace;
+            color: white;
+            background-color: #000; /* Резервный фон */
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Выделение текста желтым для важности */
+        .highlight {
+            color: var(--yellow);
+            font-weight: 600;
+        }
+
+        /* Стили для Glassmorphism (прозрачные блоки) */
+        .glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Шапка сайта */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 100;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-container svg {
+            width: 60px;
+            height: 60px;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));
+            transition: transform 0.5s ease;
+        }
+
+        .logo-container svg:hover {
+            transform: rotate(360deg);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--cyan);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--cyan);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Основной контент */
+        main {
+            margin-top: 120px;
+            padding: 0 40px;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+            min-height: calc(100vh - 200px);
+        }
+
+        section {
+            margin-bottom: 80px;
+        }
+
+        h1, h2 {
+            margin-bottom: 30px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        /* Сетка для карточек (Статьи, Рилсы, Клипы) */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 10px;
+        }
+
+        .card-content {
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        /* Цветные акценты для карточек на основе 7 цветов */
+        .card-serbia { border-top: 3px solid var(--red); }
+        .card-reels { border-top: 3px solid var(--orange); }
+        .card-cooking { border-top: 3px solid var(--green); }
+        .card-martial { border-top: 3px solid var(--blue); }
+        .card-music { border-top: 3px solid var(--purple); }
+
+        /* Футер */
+        footer {
+            padding: 30px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            border-top: 1px solid var(--glass-border);
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 50px;
+        }
+
+        footer span {
+            color: var(--cyan);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                padding: 15px;
+            }
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+            main {
+                margin-top: 160px;
+                padding: 0 20px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-container">
+            <svg viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100%" height="100%" fill="none"/>
+              <g transform="translate(70,70)">
+                <circle cx="0" cy="0" r="34" fill="white" stroke="none" stroke-width="0.5" opacity="0.2"/>
+                <g transform="rotate(0)"><circle cx="45" cy="0" r="8" fill="#FF0000"/></g>
+                <g transform="rotate(51.4)"><circle cx="45" cy="0" r="7" fill="#FF8000"/></g>
+                <g transform="rotate(102.8)"><circle cx="45" cy="0" r="6" fill="#FFFF00"/></g>
+                <g transform="rotate(154.2)"><circle cx="45" cy="0" r="5" fill="#00FF80"/></g>
+                <g transform="rotate(205.6)"><circle cx="45" cy="0" r="6" fill="#00D0FF"/></g>
+                <g transform="rotate(257)"><circle cx="45" cy="0" r="7" fill="#0000FF"/></g>
+                <g transform="rotate(308.4)"><circle cx="45" cy="0" r="8" fill="#8000FF"/></g>
+              </g>
+              <g transform="translate(70,70)">
+                <circle cx="0" cy="0" r="8" fill="white"/>
+                <circle cx="0" cy="0" r="11" fill="none" stroke="white" stroke-width="7" opacity="0.2"/>
+              </g>
+              <g transform="translate(70,70)" font-family="Fira Code, sans-serif" font-size="10" fill="white" text-anchor="middle" dominant-baseline="central">
+                <g transform="rotate(45)"><text x="0" y="-20">T</text></g>
+                <g transform="rotate(-135)"><text x="0" y="-20">T</text></g>
+                <g transform="rotate(-45)"><text x="0" y="-20">A</text></g>
+                <g transform="rotate(135)"><text x="0" y="-20">A</text></g>
+              </g>
+            </svg>
+            <div class="logo-text">DANTE ARCHIVES</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#about">О Данте</a></li>
+                <li><a href="#serbia">Сербия</a></li>
+                <li><a href="#clips">Клипы</a></li>
+                <li><a href="#arts">Искусство</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="about">
+            <h1>Программист. <span style="color: var(--cyan)">Креатор.</span> Путешественник.</h1>
+            <div class="glass" style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <p style="font-size: 1.2rem;">
+                    Добро пожаловать в цифровое пространство Данте. Здесь собраны его <span class="highlight">статьи, мысли, код и искусство</span>. 
+                    Умный, стильный, творческий. Вся его жизнь — это постоянный поиск, создание фильмов, написание музыки и путешествия по миру.
+                </p>
+            </div>
+        </section>
+
+        <section id="serbia">
+            <h2>> Путешествия: Сербия</h2>
+            <div class="grid">
+                <div class="glass card-serbia">
+                    <div class="card-title">Белград: Скрытые маршруты</div>
+                    <div class="card-content">
+                        <p>Статья о том, как почувствовать настоящий пульс города, вдали от туристических троп. Архитектура, ритм жизни и локальный код.</p>
+                        <br>
+                        <a href="#" style="color: var(--red); text-decoration: none;">[ Читать статью ]</a>
+                    </div>
+                </div>
+                <div class="glass card-reels">
+                    <div class="card-title">Рилс: Атмосфера Нови-Сада</div>
+                    <div class="card-content">
+                        <p>Короткое видео о кинематографичных закатах и стрит-арте. Музыка от Данте.</p>
+                        <br>
+                        <a href="#" style="color: var(--orange); text-decoration: none;">[ Смотреть видео ]</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="clips">
+            <h2>> База знаний & Практика</h2>
+            <div class="grid">
+                <div class="glass card-cooking">
+                    <div class="card-title">Кулинария: Идеальный стейк</div>
+                    <div class="card-content">
+                        <p>Точный алгоритм приготовления. Температурные режимы и химия процесса. Готовим как инженеры.</p>
+                        <br>
+                        <a href="#" style="color: var(--green); text-decoration: none;">[ Открыть рецепт ]</a>
+                    </div>
+                </div>
+                <div class="glass card-martial">
+                    <div class="card-title">Боевые искусства & Китайские точки</div>
+                    <div class="card-content">
+                        <p>Анализ биомеханики тела. Эффективные техники, баланс энергии и контроль дыхания.</p>
+                        <br>
+                        <a href="#" style="color: var(--blue); text-decoration: none;">[ Изучить техники ]</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="arts">
+            <h2>> Искусство & Код</h2>
+            <div class="grid">
+                <div class="glass card-music">
+                    <div class="card-title">Музыка и Поэзия</div>
+                    <div class="card-content">
+                        <p>Архив аудиотреков, черновики стихов и сценарии для будущих короткометражных фильмов.</p>
+                        <br>
+                        <a href="#" style="color: var(--purple); text-decoration: none;">[ Слушать & Читать ]</a>
+                    </div>
+                </div>
+                <div class="glass" style="border-top: 3px solid var(--yellow);">
+                    <div class="card-title">Проекты на GitHub</div>
+                    <div class="card-content">
+                        <p>Открытый исходный код, скрипты автоматизации и нейросетевые эксперименты Данте.</p>
+                        <br>
+                        <a href="#" style="color: var(--yellow); text-decoration: none;">[ Перейти в репозиторий ]</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Dante Archives. <span>Все права защищены.</span></p>
+        <p style="margin-top: 5px; font-size: 0.75rem; opacity: 0.7;">Designed with passion. Coded for the future.</p>
+    </footer>
+
+    <script>
+        function initStarfieldBackground() {
+            const canvas = document.createElement('canvas'); 
+            canvas.id = 'starfield-bg';
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            canvas.style.zIndex = '-9999'; // Очень низкий z-index
+            canvas.style.pointerEvents = 'none'; // Чтобы не блокировал клики
+            document.body.insertBefore(canvas, document.body.firstChild);
+
+            const gl = canvas.getContext('webgl', { preserveDrawingBuffer: false });
+
+            if (!gl) {
+                console.error('WebGL not supported for background');
+                return;
+            }
+
+            // Шейдеры
+            const vertexShader = `
+                attribute vec3 aPosition;
+                attribute float aSize;
+                attribute float aAlpha;
+                attribute float aColorIndex;
+                
+                uniform mat4 uProjection;
+                uniform mat4 uModelView;
+                uniform float uTime;
+                
+                varying float vAlpha;
+                varying float vColorIndex;
+                
+                void main() {
+                    vec4 pos = uModelView * vec4(aPosition, 1.0);
+                    pos.xyz += sin(uTime * 0.001 + aColorIndex * 10.0) * 5.0;
+                    gl_Position = uProjection * pos;
+                    gl_PointSize = aSize * (1.5 + sin(uTime * 0.005 + aColorIndex) * 0.5);
+                    vAlpha = aAlpha;
+                    vColorIndex = aColorIndex;
+                }
+            `;
+
+            const fragmentShader = `
+                precision highp float;
+                
+                uniform float uTime;
+                varying float vAlpha;
+                varying float vColorIndex;
+                
+                vec3 getColor(float index) {
+                    int colorType = int(mod(index * 10.0, 7.0));
+                    
+                    if (colorType == 0) return vec3(0.5, 0.0, 1.0);   // Фиолетовый
+                    if (colorType == 1) return vec3(0.0, 0.0, 1.0);   // Синий
+                    if (colorType == 2) return vec3(0.0, 0.75, 1.0);  // Голубой
+                    if (colorType == 3) return vec3(0.0, 1.0, 0.5);   // Зеленый
+                    if (colorType == 4) return vec3(1.0, 1.0, 0.0);   // Желтый
+                    if (colorType == 5) return vec3(1.0, 0.38, 0.0);  // Оранжевый
+                    if (colorType == 6) return vec3(1.0, 0.0, 0.0);   // Красный
+                    
+                    return vec3(1.0); // Белый
+                }
+                
+                void main() {
+                    float dist = length(gl_PointCoord - vec2(0.5));
+                    if (dist > 0.5) discard;
+                    
+                    float alpha = vAlpha * (0.6 + 0.4 * sin(uTime * 0.002 + vColorIndex * 10.0));
+                    vec3 color = mix(vec3(1.0), getColor(vColorIndex), step(0.93, vColorIndex)); 
+                    
+                    gl_FragColor = vec4(color, alpha * (1.0 - smoothstep(0.3, 0.5, dist)));
+                }
+            `;
+
+            // Компиляция шейдеров
+            function compileShader(gl, source, type) {
+                const shader = gl.createShader(type);
+                gl.shaderSource(shader, source);
+                gl.compileShader(shader);
+                
+                if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                    console.error(gl.getShaderInfoLog(shader));
+                    gl.deleteShader(shader);
+                    return null;
+                }
+                return shader;
+            }
+
+            const vs = compileShader(gl, vertexShader, gl.VERTEX_SHADER);
+            const fs = compileShader(gl, fragmentShader, gl.FRAGMENT_SHADER);
+            const program = gl.createProgram();
+            gl.attachShader(program, vs);
+            gl.attachShader(program, fs);
+            gl.linkProgram(program);
+            
+            if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+                console.error(gl.getProgramInfoLog(program));
+            }
+            
+            gl.useProgram(program);
+
+            // Генерация звезд
+            const STARS_COUNT = 7000;
+            const positions = new Float32Array(STARS_COUNT * 3);
+            const sizes = new Float32Array(STARS_COUNT);
+            const alphas = new Float32Array(STARS_COUNT);
+            const colorIndices = new Float32Array(STARS_COUNT);
+
+            for (let i = 0; i < STARS_COUNT; i++) {
+                positions[i*3] = (Math.random() - 0.5) * 2500;
+                positions[i*3+1] = (Math.random() - 0.5) * 2500;
+                positions[i*3+2] = (Math.random() - 0.5) * 2500;
+                
+                sizes[i] = 0.8 + Math.random() * 1.4;
+                alphas[i] = 0.7 + Math.random() * 0.3;
+                colorIndices[i] = Math.random();
+            }
+
+            // Буферы
+            const positionBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
+            
+            const sizeBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, sizes, gl.STATIC_DRAW);
+            
+            const alphaBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, alphaBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, alphas, gl.STATIC_DRAW);
+            
+            const colorIndexBuffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, colorIndexBuffer);
+            gl.bufferData(gl.ARRAY_BUFFER, colorIndices, gl.STATIC_DRAW);
+
+            // Атрибуты
+            const aPosition = gl.getAttribLocation(program, 'aPosition');
+            gl.enableVertexAttribArray(aPosition);
+            gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+            gl.vertexAttribPointer(aPosition, 3, gl.FLOAT, false, 0, 0);
+            
+            const aSize = gl.getAttribLocation(program, 'aSize');
+            gl.enableVertexAttribArray(aSize);
+            gl.bindBuffer(gl.ARRAY_BUFFER, sizeBuffer);
+            gl.vertexAttribPointer(aSize, 1, gl.FLOAT, false, 0, 0);
+            
+            const aAlpha = gl.getAttribLocation(program, 'aAlpha');
+            gl.enableVertexAttribArray(aAlpha);
+            gl.bindBuffer(gl.ARRAY_BUFFER, alphaBuffer);
+            gl.vertexAttribPointer(aAlpha, 1, gl.FLOAT, false, 0, 0);
+            
+            const aColorIndex = gl.getAttribLocation(program, 'aColorIndex');
+            gl.enableVertexAttribArray(aColorIndex);
+            gl.bindBuffer(gl.ARRAY_BUFFER, colorIndexBuffer);
+            gl.vertexAttribPointer(aColorIndex, 1, gl.FLOAT, false, 0, 0);
+
+            // Юниформы
+            const uProjection = gl.getUniformLocation(program, 'uProjection');
+            const uModelView = gl.getUniformLocation(program, 'uModelView');
+            const uTime = gl.getUniformLocation(program, 'uTime');
+
+            // Матрицы
+            const projection = new Float32Array(16);
+            const modelView = new Float32Array(16);
+            
+            function updateMatrix() {
+                const fov = 75 * Math.PI / 180;
+                const aspect = canvas.width / canvas.height;
+                const near = 0.1;
+                const far = 10000;
+                
+                const f = 1.0 / Math.tan(fov / 2);
+                projection.fill(0);
+                projection[0] = f / aspect;
+                projection[5] = f;
+                projection[10] = (far + near) / (near - far);
+                projection[11] = -1;
+                projection[14] = (2 * far * near) / (near - far);
+                
+                modelView.fill(0);
+                modelView[0] = 1;
+                modelView[5] = 1;
+                modelView[10] = 1;
+                modelView[15] = 1;
+                modelView[14] = -1200;
+            }
+
+            gl.enable(gl.BLEND);
+            gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+
+            let time = 0;
+            function render() {
+                time += 16;
+                
+                gl.viewport(0, 0, canvas.width, canvas.height);
+                gl.clearColor(0, 0, 0, 1);
+                gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+                
+                const speed = 0.009;
+                modelView[0] = Math.cos(time * speed * 0.15);
+                modelView[2] = Math.sin(time * speed * 0.09);
+                modelView[8] = -Math.sin(time * speed * 0.1);
+                modelView[10] = Math.cos(time * speed * 0.09);
+                
+                gl.uniformMatrix4fv(uProjection, false, projection);
+                gl.uniformMatrix4fv(uModelView, false, modelView);
+                gl.uniform1f(uTime, time);
+                
+                gl.drawArrays(gl.POINTS, 0, STARS_COUNT);
+                requestAnimationFrame(render);
+            }
+
+            function resize() {
+                canvas.width = window.innerWidth * window.devicePixelRatio;
+                canvas.height = window.innerHeight * window.devicePixelRatio;
+                canvas.style.width = window.innerWidth + 'px';
+                canvas.style.height = window.innerHeight + 'px';
+                updateMatrix();
+            }
+            
+            window.addEventListener('resize', resize);
+            resize();
+            updateMatrix();
+            render();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initStarfieldBackground();
+        });
+    </script>
+</body>
+</html>
